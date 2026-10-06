@@ -77,7 +77,7 @@ export default function Home() {
         aria-labelledby="intro-heading"
         className="border-b border-slate-200 bg-slate-950 text-white"
       >
-        <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-6 py-20 sm:px-8 lg:px-12">
+        <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-center px-6 py-16 sm:px-8 lg:px-12">
           <p className="mb-5 text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">
             Developer Profile
           </p>
@@ -91,12 +91,40 @@ export default function Home() {
             원리를 이해하며 해결합니다.
           </h1>
 
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300 sm:text-xl">
             개발 과정에서 발생하는 문제를 단순히 우회하기보다 원인을 확인하고,
             작업을 작은 단위로 나누어 관리하는 개발자입니다.
           </p>
 
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-7 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-400">
+                주요 활동
+              </p>
+              <p className="mt-2 font-semibold text-white">
+                Node.js / Next.js 풀스택 개발
+              </p>
+              <p className="mt-1 text-sm leading-6 text-slate-300">
+                Nginx Reverse Proxy 구성과 Unreal Engine Digital Twin 프로젝트를
+                포함한 개발 경험이 있습니다.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-700 bg-slate-900/60 p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-400">
+                공개 근거
+              </p>
+              <p className="mt-2 font-semibold text-white">
+                공개 프로젝트와 관련 자료
+              </p>
+              <p className="mt-1 text-sm leading-6 text-slate-300">
+                Blog-frontend, Blog-backend, Nginx-proxy 및 Digital Twin 관련
+                공개 자료를 확인할 수 있습니다.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-7 flex flex-wrap gap-3">
             <a
               href="#strengths"
               className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-slate-950"
