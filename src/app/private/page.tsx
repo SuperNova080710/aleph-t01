@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 
 function fromBase64Url(value: string): ArrayBuffer {
@@ -108,7 +109,11 @@ export default function PrivatePage() {
   }, []);
 
   useEffect(() => {
-    void refresh();
+    const timeoutId = window.setTimeout(() => {
+      void refresh();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [refresh]);
 
   async function registerPasskey(event: FormEvent) {
@@ -298,9 +303,9 @@ export default function PrivatePage() {
     <main className="min-h-screen bg-[#DDD8CE] text-[#172033]">
       <header className="border-b border-[#C3BDB2] bg-[#ECE8E0]">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
-          <a href="/" className="text-sm font-bold tracking-[0.18em] text-[#172033]">
+          <Link href="/" className="text-sm font-bold tracking-[0.18em] text-[#172033]">
             DEVELOPER PROFILE
-          </a>
+          </Link>
           <span className="border border-[#263B5E] px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-[#263B5E]">
             Private · Passkey
           </span>
@@ -320,9 +325,9 @@ export default function PrivatePage() {
             <div className="border border-[#C3BDB2] bg-[#DDD8CE] p-5">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#4F5868]">Public</p>
               <p className="mt-2 font-bold">자기소개 · 프로젝트 · 강점 · 공개 근거</p>
-              <a href="/" className="mt-4 inline-block text-sm font-bold text-[#263B5E] underline underline-offset-4">
+              <Link href="/" className="mt-4 inline-block text-sm font-bold text-[#263B5E] underline underline-offset-4">
                 공개 소개로 돌아가기
-              </a>
+              </Link>
             </div>
             <div className="border border-[#263B5E] bg-[#172033] p-5 text-[#ECE8E0]">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#C3BDB2]">Private</p>
