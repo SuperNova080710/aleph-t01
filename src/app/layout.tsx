@@ -24,7 +24,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ko"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <a
+          href="/private"
+          className="fixed bottom-5 right-5 z-50 border border-[#ECE8E0] bg-[#172033] px-4 py-3 text-xs font-bold tracking-[0.12em] text-[#ECE8E0] shadow-lg focus:outline-none focus:ring-2 focus:ring-[#263B5E] focus:ring-offset-2"
+        >
+          PRIVATE · PASSKEY
+        </a>
+      </body>
     </html>
   );
 }
