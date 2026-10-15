@@ -316,10 +316,10 @@ export default function PrivatePage() {
         <div className="mx-auto max-w-5xl px-6 py-14">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#4F5868]">T08 Private Area</p>
           <h1 className="mt-4 max-w-3xl text-4xl font-bold tracking-[-0.04em] sm:text-5xl">
-            공개 소개와 비공개 메모를 서버에서 분리했습니다.
+            공개 소개와 비공개 영역을 서버에서 분리했습니다.
           </h1>
           <p className="mt-6 max-w-3xl text-base leading-8 text-[#4F5868]">
-            공개 소개 페이지는 누구나 볼 수 있습니다. 아래 비공개 자료는 패스키 서명을 서버가 검증한 뒤에만 별도 API로 내려옵니다. 이 과제의 메모는 모두 가상 내용이며 실제 개인정보가 아닙니다.
+            공개 소개 페이지는 누구나 볼 수 있습니다. 보호 데이터의 구체적인 내용은 패스키 서명을 서버가 검증한 뒤에만 별도 API로 내려옵니다. 이 과제의 보호 데이터는 모두 가상 내용이며 실제 개인정보가 아닙니다.
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <div className="border border-[#C3BDB2] bg-[#DDD8CE] p-5">
@@ -331,8 +331,8 @@ export default function PrivatePage() {
             </div>
             <div className="border border-[#263B5E] bg-[#172033] p-5 text-[#ECE8E0]">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#C3BDB2]">Private</p>
-              <p className="mt-2 font-bold">프로젝트 메모 · 준비 목록 · 회고</p>
-              <p className="mt-3 text-sm leading-6 text-[#C3BDB2]">로그인 전에는 내용 자체를 서버가 보내지 않습니다.</p>
+              <p className="mt-2 font-bold">인증 성공 후에만 확인할 수 있는 보호 데이터</p>
+              <p className="mt-3 text-sm leading-6 text-[#C3BDB2]">로그인 전에는 항목의 제목과 내용 자체를 서버가 보내지 않습니다.</p>
             </div>
           </div>
         </div>
@@ -467,7 +467,7 @@ export default function PrivatePage() {
           {!user ? (
             <div className="mt-8 border border-[#4F5868] p-6">
               <p className="text-lg font-bold">잠겨 있습니다.</p>
-              <p className="mt-3 text-sm leading-7 text-[#C3BDB2]">이 화면의 HTML에는 아래 비공개 메모가 포함되어 있지 않습니다. 인증 성공 후 `/api/private`에서만 가져옵니다.</p>
+              <p className="mt-3 text-sm leading-7 text-[#C3BDB2]">이 화면의 HTML에는 보호 데이터의 구체적인 항목이 포함되어 있지 않습니다. 인증 성공 후 `/api/private`에서만 가져옵니다.</p>
             </div>
           ) : (
             <div className="mt-8 space-y-4">
