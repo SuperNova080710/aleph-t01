@@ -59,12 +59,21 @@ async function dbRequest<T>(
   init: RequestInit = {},
 ): Promise<T> {
   const config = getT08Config();
+  const authHeaders =
+    config.supabaseKeyType === "legacy-service-role"
+      ? {
+          apikey: config.supabaseApiKey,
+          Authorization: `Bearer ${config.supabaseApiKey}`,
+        }
+      : {
+          apikey: config.supabaseApiKey,
+        };
+
   const response = await fetch(`${config.supabaseUrl}/rest/v1/${path}`, {
     ...init,
     cache: "no-store",
     headers: {
-      apikey: config.supabaseServiceRoleKey,
-      Authorization: `Bearer ${config.supabaseServiceRoleKey}`,
+      ...authHeaders,
       Accept: "application/json",
       "Content-Type": "application/json",
       ...(init.headers ?? {}),
