@@ -36,6 +36,18 @@ html { scroll-behavior: smooth; scroll-padding-top: 95px; }
 .portfolio-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .portfolio-skip { position: fixed; z-index: 200; top: -90px; left: 16px; background: var(--pf-navy); color: white; padding: 12px 16px; border-radius: 8px; }
 .portfolio-skip:focus { top: 12px; }
+.portfolio-reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 4px;
+  z-index: 120;
+  pointer-events: none;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
+  box-shadow: 0 1px 8px rgb(37 99 235 / 25%);
+  will-change: transform;
+}
 
 .portfolio-header {
   position: sticky; top: 0; z-index: 60;
@@ -189,6 +201,42 @@ html { scroll-behavior: smooth; scroll-padding-top: 95px; }
 .portfolio-skill-index { font: 750 11px var(--font-geist-mono), monospace; color: #6e96c4; }
 .portfolio-skill-list li > span:last-child { color: #83c9ff; font-size: 16px; }
 
+/* Strength accordion keyboard affordances and visible focus treatment. */
+.portfolio-keyboard-hint {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -8px 0 22px;
+  color: #496584;
+  font-size: 12px;
+  line-height: 1.85;
+}
+.portfolio-keyboard-symbol { font-size: 19px; color: var(--pf-blue); margin-right: 5px; }
+.portfolio-keyboard-hint kbd {
+  display: inline-block;
+  border: 1px solid #b9d1f5;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0 7px;
+  background: #f1f7ff;
+  color: #194986;
+  font: 760 11px/21px var(--font-geist-mono), monospace;
+}
+.portfolio-strength-card:focus-within {
+  background: #edf5ff;
+  border-color: var(--pf-blue);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 23%);
+}
+.portfolio-strength-trigger:focus-visible {
+  outline: 3px solid var(--pf-blue);
+  outline-offset: -5px;
+  border-radius: 12px;
+}
+.portfolio-strength-trigger:focus-visible .portfolio-strength-toggle {
+  background: var(--pf-blue);
+  color: white;
+}
 .portfolio-strengths-section { background: white; }
 .portfolio-strength-grid { display: grid; gap: 12px; }
 .portfolio-strength-card { border: 1px solid #dfebfa; border-radius: 14px; overflow: hidden; background: #fff; transition: background-color .28s, border-color .28s; }
@@ -196,8 +244,61 @@ html { scroll-behavior: smooth; scroll-padding-top: 95px; }
 .portfolio-strength-trigger { width: 100%; display: grid; grid-template-columns: 52px minmax(0, 1fr) 35px; align-items: center; gap: 14px; text-align: left; padding: 24px 27px; background: transparent; border: 0; cursor: pointer; }
 .portfolio-strength-num { font: 780 14px var(--font-geist-mono), monospace; color: var(--pf-blue); }
 .portfolio-strength-title { font-size: clamp(16px, 1.9vw, 22px); letter-spacing: -.05em; font-weight: 730; color: var(--pf-text); }
-.portfolio-strength-toggle { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #eaf3ff; color: var(--pf-blue); font-size: 23px; line-height: 1; }
-.portfolio-strength-detail { margin: 0 27px 27px 93px; border-top: 1px solid #dce7f5; padding-top: 25px; }
+.portfolio-strength-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #eaf3ff;
+  color: var(--pf-blue);
+  font-size: 23px;
+  line-height: 1;
+  transition: transform .35s var(--pf-ease), background-color .3s, color .3s;
+}
+.portfolio-strength-card.is-open .portfolio-strength-toggle {
+  transform: rotate(45deg);
+  background: #dbeafe;
+}
+/* CSS grid interpolates between collapsed and full content height, including
+   when users click again before the preceding transition completes. */
+.portfolio-strength-detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  min-width: 0;
+  margin: 0 27px 0 93px;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows .46s var(--pf-ease),
+    opacity .32s ease,
+    margin-bottom .46s var(--pf-ease),
+    visibility 0s linear .46s;
+}
+.portfolio-strength-card.is-open .portfolio-strength-detail {
+  grid-template-rows: 1fr;
+  margin-bottom: 27px;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    grid-template-rows .46s var(--pf-ease),
+    opacity .32s ease,
+    margin-bottom .46s var(--pf-ease),
+    visibility 0s;
+}
+.portfolio-strength-detail-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.portfolio-strength-detail-content {
+  padding-top: 25px;
+  border-top: 1px solid #dce7f5;
+  transform: translateY(-7px);
+  transition: transform .46s var(--pf-ease);
+}
+.portfolio-strength-card.is-open .portfolio-strength-detail-content {
+  transform: translateY(0);
+}
 .portfolio-strength-detail dl { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 27px; margin: 0; }
 .portfolio-strength-detail dt { color: #2162c6; font: 810 11px var(--font-geist-mono), monospace; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 12px; }
 .portfolio-strength-detail dd { color: var(--pf-muted); font-size: 13px; line-height: 1.9; margin: 0; }
@@ -313,7 +414,9 @@ html { scroll-behavior: smooth; scroll-padding-top: 95px; }
   .portfolio-project-card-3 .portfolio-card-top { width: 100%; }
   .portfolio-strength-trigger { grid-template-columns: 27px minmax(0,1fr) 29px; gap: 9px; padding: 19px 14px; }
   .portfolio-strength-toggle { width: 29px; height: 29px; }
-  .portfolio-strength-detail { margin: 0 16px 19px 50px; padding-top: 20px; }
+  .portfolio-strength-detail { margin: 0 16px 0 50px; }
+  .portfolio-strength-card.is-open .portfolio-strength-detail { margin-bottom: 19px; }
+  .portfolio-strength-detail-content { padding-top: 20px; }
   .portfolio-evidence-grid { grid-template-columns: 1fr; }
   .portfolio-evidence-item { min-height: 72px; }
   .portfolio-final-cta { display: block; padding: 24px; margin-top: 32px; }
