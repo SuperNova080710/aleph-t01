@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 const strengths = [
   {
@@ -96,6 +96,41 @@ const evidenceLinks = [
 
 export default function Home() {
   const [expandedStrength, setExpandedStrength] = useState<number | null>(null);
+  const readingProgressRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const progressBar = readingProgressRef.current;
+    if (!progressBar) return;
+
+    let animationFrame = 0;
+
+    const updateProgress = () => {
+      animationFrame = 0;
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const fraction = maxScroll === 0 ? 1 : Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      progressBar.style.transform = `scaleX(${fraction})`;
+    };
+
+    const scheduleUpdate = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(updateProgress);
+    };
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    // Keep the gauge accurate while accordion height animates.
+    const resizeObserver = typeof ResizeObserver !== "undefined"
+      ? new ResizeObserver(scheduleUpdate)
+      : null;
+    resizeObserver?.observe(document.body);
+    updateProgress();
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      resizeObserver?.disconnect();
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+    };
+  }, []);
 
   // Tab and Shift+Tab retain the browser's native focus order.
   // Arrow keys and Home/End provide optional navigation within the accordion.
@@ -129,6 +164,7 @@ export default function Home() {
 
   return (
     <main id="top" className="portfolio-page">
+      <div ref={readingProgressRef} className="portfolio-reading-progress" aria-hidden="true" />
       <a className="portfolio-skip" href="#profile">본문 바로가기</a>
 
       <header className="portfolio-header">
@@ -318,20 +354,25 @@ export default function Home() {
                   >
                     <span className="portfolio-strength-num">0{index + 1}</span>
                     <span className="portfolio-strength-title">{strength.title}</span>
-                    <span aria-hidden="true" className="portfolio-strength-toggle">{isOpen ? "−" : "+"}</span>
+                    <span aria-hidden="true" className="portfolio-strength-toggle">+</span>
                   </button>
                   <div
                     id={"strength-detail-" + index}
                     role="region"
                     aria-labelledby={"strength-trigger-" + index}
                     className="portfolio-strength-detail"
-                    hidden={!isOpen}
+                    aria-hidden={!isOpen}
+                    inert={!isOpen}
                   >
-                    <dl>
-                      <div><dt>Situation</dt><dd>{strength.situation}</dd></div>
-                      <div><dt>Action</dt><dd>{strength.action}</dd></div>
-                      <div><dt>Result</dt><dd>{strength.result}</dd></div>
-                    </dl>
+                    <div className="portfolio-strength-detail-inner">
+                      <div className="portfolio-strength-detail-content">
+                        <dl>
+                          <div><dt>Situation</dt><dd>{strength.situation}</dd></div>
+                          <div><dt>Action</dt><dd>{strength.action}</dd></div>
+                          <div><dt>Result</dt><dd>{strength.result}</dd></div>
+                        </dl>
+                      </div>
+                    </div>
                   </div>
                 </article>
               );
