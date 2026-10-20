@@ -428,3 +428,34 @@ html { scroll-padding-top: 95px; }
   .portfolio-page.portfolio-js-motion .portfolio-reveal { opacity: 1 !important; transform: none !important; }
   .portfolio-ring, .portfolio-dot, .portfolio-page *, .private-portfolio-page *, .portfolio-passkey { animation: none !important; transition: none !important; }
 }
+
+/* Skip navigation and the first-view public evidence strip. */
+.portfolio-skip-link {
+  position: fixed;
+  left: 15px;
+  top: -90px;
+  z-index: 200;
+  background: var(--folio-ink);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.portfolio-skip-link:focus { top: 12px; }
+.portfolio-featured-proof {
+  width: min(100%, 625px);
+  margin-top: 19px;
+  padding-top: 15px;
+  border-top: 1px solid var(--folio-line);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.portfolio-featured-proof > span { color: var(--folio-muted); }
+.portfolio-featured-proof a { color: var(--folio-rust); font-weight: 700; }
+.portfolio-featured-proof a:hover { text-decoration: underline; }
+@media (max-width: 760px) { .portfolio-featured-proof { align-items: center; text-align: center; } }
