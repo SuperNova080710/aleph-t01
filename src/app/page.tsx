@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 
 const strengths = [
   {
@@ -96,6 +96,36 @@ const evidenceLinks = [
 
 export default function Home() {
   const [expandedStrength, setExpandedStrength] = useState<number | null>(null);
+
+  // Tab and Shift+Tab retain the browser's native focus order.
+  // Arrow keys and Home/End provide optional navigation within the accordion.
+  function handleStrengthKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+
+    let nextIndex: number;
+    switch (event.key) {
+      case "ArrowDown":
+        nextIndex = (index + 1) % strengths.length;
+        break;
+      case "ArrowUp":
+        nextIndex = (index - 1 + strengths.length) % strengths.length;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = strengths.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    const buttons = event.currentTarget
+      .closest(".portfolio-strength-grid")
+      ?.querySelectorAll<HTMLButtonElement>(".portfolio-strength-trigger");
+    buttons?.[nextIndex]?.focus();
+  }
 
   return (
     <main id="top" className="portfolio-page">
@@ -268,17 +298,35 @@ export default function Home() {
             </div>
             <p>각 강점을 선택하면 실제 경험의 상황, 행동, 결과를 확인할 수 있습니다.</p>
           </div>
-          <div className="portfolio-strength-grid">
+          <p id="strengths-keyboard-help" className="portfolio-keyboard-hint">
+            <span aria-hidden="true" className="portfolio-keyboard-symbol">⌨</span>
+            <kbd>Tab</kbd>으로 선택, <kbd>Enter</kbd> 또는 <kbd>Space</kbd>로 펼치기 · <kbd>↑</kbd> / <kbd>↓</kbd>로 항목 이동
+          </p>
+          <div className="portfolio-strength-grid" role="group" aria-label="작업 방식과 강점" aria-describedby="strengths-keyboard-help">
             {strengths.map((strength, index) => {
               const isOpen = expandedStrength === index;
               return (
                 <article className={"portfolio-strength-card" + (isOpen ? " is-open" : "")} key={strength.title}>
-                  <button type="button" className="portfolio-strength-trigger" aria-expanded={isOpen} aria-controls={"strength-detail-" + index} onClick={() => setExpandedStrength(isOpen ? null : index)}>
+                  <button
+                    id={"strength-trigger-" + index}
+                    type="button"
+                    className="portfolio-strength-trigger"
+                    aria-expanded={isOpen}
+                    aria-controls={"strength-detail-" + index}
+                    onClick={() => setExpandedStrength(isOpen ? null : index)}
+                    onKeyDown={(event) => handleStrengthKeyDown(event, index)}
+                  >
                     <span className="portfolio-strength-num">0{index + 1}</span>
                     <span className="portfolio-strength-title">{strength.title}</span>
                     <span aria-hidden="true" className="portfolio-strength-toggle">{isOpen ? "−" : "+"}</span>
                   </button>
-                  <div id={"strength-detail-" + index} className="portfolio-strength-detail" hidden={!isOpen}>
+                  <div
+                    id={"strength-detail-" + index}
+                    role="region"
+                    aria-labelledby={"strength-trigger-" + index}
+                    className="portfolio-strength-detail"
+                    hidden={!isOpen}
+                  >
                     <dl>
                       <div><dt>Situation</dt><dd>{strength.situation}</dd></div>
                       <div><dt>Action</dt><dd>{strength.action}</dd></div>
