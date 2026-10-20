@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./portfolio.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <a
           href="/private"
-          className="fixed bottom-5 right-5 z-50 border border-[#ECE8E0] bg-[#172033] px-4 py-3 text-xs font-bold tracking-[0.12em] text-[#ECE8E0] shadow-lg focus:outline-none focus:ring-2 focus:ring-[#263B5E] focus:ring-offset-2"
+          className="portfolio-passkey fixed bottom-5 right-5 z-50 border border-[#ECE8E0] bg-[#172033] px-4 py-3 text-xs font-bold tracking-[0.12em] text-[#ECE8E0] shadow-lg focus:outline-none focus:ring-2 focus:ring-[#263B5E] focus:ring-offset-2"
         >
           PRIVATE · PASSKEY
         </a>
