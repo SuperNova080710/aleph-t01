@@ -300,7 +300,7 @@ export default function PrivatePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#DDD8CE] text-[#172033]">
+    <main className="private-portfolio-page min-h-screen bg-[#DDD8CE] text-[#172033]">
       <header className="border-b border-[#C3BDB2] bg-[#ECE8E0]">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
           <Link href="/" className="text-sm font-bold tracking-[0.18em] text-[#172033]">
