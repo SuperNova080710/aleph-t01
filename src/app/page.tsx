@@ -164,6 +164,7 @@ export default function Home() {
   return (
     <main className="portfolio-page min-h-screen bg-[#DDD8CE] text-[#172033]">
       <div className="portfolio-reading-progress" aria-hidden="true" />
+      <a className="portfolio-skip-link" href="#profile">본문 바로가기</a>
       <header className="portfolio-header border-b border-[#C3BDB2] bg-[#ECE8E0]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8">
           <a
@@ -253,6 +254,12 @@ export default function Home() {
                   </span>
                 ),
               )}
+            </div>
+            <div className="portfolio-featured-proof">
+              <span>대표 활동 · 개발 프로젝트 및 Digital Twin 구현 경험</span>
+              <a href="http://journal.dcs.or.kr/xml/47684/47684.pdf" target="_blank" rel="noopener noreferrer">
+                공개 자료로 확인하기 <span aria-hidden="true">↗</span>
+              </a>
             </div>
           </div>
 
