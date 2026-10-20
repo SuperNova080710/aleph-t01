@@ -189,6 +189,42 @@ html { scroll-behavior: smooth; scroll-padding-top: 95px; }
 .portfolio-skill-index { font: 750 11px var(--font-geist-mono), monospace; color: #6e96c4; }
 .portfolio-skill-list li > span:last-child { color: #83c9ff; font-size: 16px; }
 
+/* Strength accordion keyboard affordances and visible focus treatment. */
+.portfolio-keyboard-hint {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -8px 0 22px;
+  color: #496584;
+  font-size: 12px;
+  line-height: 1.85;
+}
+.portfolio-keyboard-symbol { font-size: 19px; color: var(--pf-blue); margin-right: 5px; }
+.portfolio-keyboard-hint kbd {
+  display: inline-block;
+  border: 1px solid #b9d1f5;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0 7px;
+  background: #f1f7ff;
+  color: #194986;
+  font: 760 11px/21px var(--font-geist-mono), monospace;
+}
+.portfolio-strength-card:focus-within {
+  background: #edf5ff;
+  border-color: var(--pf-blue);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 23%);
+}
+.portfolio-strength-trigger:focus-visible {
+  outline: 3px solid var(--pf-blue);
+  outline-offset: -5px;
+  border-radius: 12px;
+}
+.portfolio-strength-trigger:focus-visible .portfolio-strength-toggle {
+  background: var(--pf-blue);
+  color: white;
+}
 .portfolio-strengths-section { background: white; }
 .portfolio-strength-grid { display: grid; gap: 12px; }
 .portfolio-strength-card { border: 1px solid #dfebfa; border-radius: 14px; overflow: hidden; background: #fff; transition: background-color .28s, border-color .28s; }
