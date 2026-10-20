@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const strengths = [
   {
@@ -97,9 +97,74 @@ const evidenceLinks = [
 export default function Home() {
   const [openStrength, setOpenStrength] = useState<number | null>(null);
 
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const main = document.querySelector<HTMLElement>(".portfolio-page");
+    const sections = document.querySelectorAll<HTMLElement>(".portfolio-reveal");
+    let observer: IntersectionObserver | null = null;
+
+    if (!reducedMotion.matches && "IntersectionObserver" in window) {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer?.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.08, rootMargin: "0px 0px -25px 0px" },
+      );
+      sections.forEach((section) => observer?.observe(section));
+      main?.classList.add("portfolio-js-motion");
+    }
+
+    const progress = document.querySelector<HTMLElement>(".portfolio-reading-progress");
+    let frame = 0;
+    const renderProgress = () => {
+      frame = 0;
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (progress) {
+        const fraction = scrollable > 0 ? Math.min(1, window.scrollY / scrollable) : 0;
+        progress.style.transform = `scaleX(${fraction})`;
+      }
+    };
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(renderProgress);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    renderProgress();
+
+    const hero = document.querySelector<HTMLElement>(".portfolio-hero");
+    const onPointerMove = (event: PointerEvent) => {
+      if (!hero || reducedMotion.matches || event.pointerType === "touch") return;
+      const rect = hero.getBoundingClientRect();
+      hero.style.setProperty("--pointer-x", `${((event.clientX - rect.left) / rect.width) * 100}%`);
+      hero.style.setProperty("--pointer-y", `${((event.clientY - rect.top) / rect.height) * 100}%`);
+    };
+    const onPointerLeave = () => {
+      hero?.style.setProperty("--pointer-x", "50%");
+      hero?.style.setProperty("--pointer-y", "35%");
+    };
+    hero?.addEventListener("pointermove", onPointerMove);
+    hero?.addEventListener("pointerleave", onPointerLeave);
+
+    return () => {
+      observer?.disconnect();
+      main?.classList.remove("portfolio-js-motion");
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      hero?.removeEventListener("pointermove", onPointerMove);
+      hero?.removeEventListener("pointerleave", onPointerLeave);
+    };
+  }, []);
+
   return (
-    <main className="min-h-screen bg-[#DDD8CE] text-[#172033]">
-      <header className="border-b border-[#C3BDB2] bg-[#ECE8E0]">
+    <main className="portfolio-page min-h-screen bg-[#DDD8CE] text-[#172033]">
+      <div className="portfolio-reading-progress" aria-hidden="true" />
+      <header className="portfolio-header border-b border-[#C3BDB2] bg-[#ECE8E0]">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8">
           <a
             href="#top"
@@ -149,17 +214,22 @@ export default function Home() {
 
       <div id="top" />
 
-      <section className="border-b border-[#C3BDB2] bg-[#ECE8E0]">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 lg:grid-cols-[1.25fr_0.75fr] lg:px-8 lg:py-20">
+      <section className="portfolio-hero border-b border-[#C3BDB2] bg-[#ECE8E0]">
+        <div className="portfolio-ambient" aria-hidden="true">
+          <span className="portfolio-ring portfolio-ring-one" />
+          <span className="portfolio-ring portfolio-ring-two" />
+          <span className="portfolio-dot" />
+        </div>
+        <div className="portfolio-hero-layout mx-auto grid max-w-6xl gap-10 px-6 py-14 lg:grid-cols-[1.25fr_0.75fr] lg:px-8 lg:py-20">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#4F5868]">
+            <p className="portfolio-eyebrow text-xs font-bold uppercase tracking-[0.25em] text-[#4F5868]">
               Developer Profile
             </p>
 
             <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-[-0.04em] text-[#172033] sm:text-5xl lg:text-5xl">
               문제의 원인을 추적하고,
               <br />
-              원리를 이해하며 해결합니다.
+              <em>원리를 이해하며 해결합니다.</em>
             </h1>
 
             <p className="mt-7 max-w-2xl text-base leading-8 text-[#4F5868] sm:text-lg">
@@ -167,7 +237,12 @@ export default function Home() {
               확인하고, 작업을 작은 단위로 나누어 관리하는 개발자입니다.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-2">
+            <div className="portfolio-hero-links">
+              <a className="portfolio-primary-button" href="#strengths">나를 알아보기 <span aria-hidden="true">↘</span></a>
+              <a className="portfolio-secondary-button" href="#experience">프로젝트 살펴보기 <span aria-hidden="true">↗</span></a>
+            </div>
+
+            <div className="portfolio-skills mt-8 flex flex-wrap gap-2">
               {["# Node.js", "# Next.js", "# Nginx", "# Unreal Engine"].map(
                 (technology) => (
                   <span
@@ -181,36 +256,34 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid gap-5 self-end">
-            <div className="border-l-2 border-[#263B5E] pl-5">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#4F5868]">
-                주요 활동
-              </p>
-              <p className="mt-3 text-sm leading-7 text-[#4F5868]">
-                Node.js / Next.js 풀스택 개발, Nginx Reverse Proxy 구성과
-                Unreal Engine Digital Twin 프로젝트를 포함한 개발 경험이
-                있습니다.
-              </p>
+          <aside className="portfolio-overview" aria-labelledby="overview-heading">
+            <div className="portfolio-overview-head">
+              <p className="portfolio-overview-kicker">THREE THINGS ABOUT ME</p>
+              <h2 id="overview-heading">나를 설명하는 세 가지 강점</h2>
             </div>
-
-            <div className="border-l-2 border-[#C3BDB2] pl-5">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#4F5868]">
-                공개 근거
-              </p>
-              <p className="mt-3 text-sm leading-7 text-[#4F5868]">
-                실제 프로젝트 저장소와 Digital Twin 관련 공개 자료를
-                연결하여 직접 확인할 수 있도록 구성했습니다.
-              </p>
-            </div>
-          </div>
-          
+            <ol className="portfolio-overview-list">
+              {strengths.map((strength, index) => (
+                <li key={strength.title}>
+                  <a href={`#strength-${index + 1}`}>
+                    <span className="portfolio-number">0{index + 1}</span>
+                    <span className="portfolio-overview-copy">
+                      <strong>{strength.title}</strong>
+                      <span>{index === 0 ? "현상을 넘어 원인까지 확인합니다." : index === 1 ? "변경 내용을 작은 단위로 관리합니다." : "동작 원리를 이해하고 적용합니다."}</span>
+                    </span>
+                    <span aria-hidden="true">↘</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+            <p className="portfolio-overview-hint">각 강점을 선택하면 실제 경험을 자세히 확인할 수 있습니다.</p>
+          </aside>
         </div>
       </section>
 
       <section
         id="profile"
         aria-labelledby="profile-heading"
-        className="border-b border-[#C3BDB2] bg-[#DDD8CE]"
+        className="portfolio-profile border-b border-[#C3BDB2] bg-[#DDD8CE]"
       >
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-14 lg:grid-cols-[0.7fr_1.3fr] lg:px-8 lg:py-20">
           <div>
@@ -251,7 +324,7 @@ export default function Home() {
       <section
         id="experience"
         aria-labelledby="experience-heading"
-        className="border-b border-[#C3BDB2] bg-[#ECE8E0]"
+        className="portfolio-work border-b border-[#C3BDB2] bg-[#ECE8E0]"
       >
         <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8 lg:py-20">
           <div className="max-w-2xl">
@@ -265,7 +338,7 @@ export default function Home() {
             {projects.map((project, index) => (
               <article
                 key={project.title}
-                className="grid gap-5 border-b border-[#C3BDB2] py-7 last:border-b-0 lg:grid-cols-[5rem_1fr_auto] lg:items-start"
+                className="portfolio-project portfolio-reveal grid gap-5 border-b border-[#C3BDB2] py-7 last:border-b-0 lg:grid-cols-[5rem_1fr_auto] lg:items-start"
               >
                 <p className="text-sm font-bold text-[#4F5868]">
                   0{index + 1}
@@ -319,7 +392,7 @@ export default function Home() {
       <section
         id="strengths"
         aria-labelledby="strengths-heading"
-        className="border-b border-[#C3BDB2] bg-[#DDD8CE]"
+        className="portfolio-strengths border-b border-[#C3BDB2] bg-[#DDD8CE]"
       >
         <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8 lg:py-20">
           <div className="max-w-2xl">
@@ -336,7 +409,8 @@ export default function Home() {
               return (
                 <article
                   key={strength.title}
-                  className="border-b border-[#C3BDB2] last:border-b-0"
+                  id={`strength-${index + 1}`}
+                  className="portfolio-strength portfolio-reveal border-b border-[#C3BDB2] last:border-b-0"
                 >
                   <button
                     type="button"
@@ -408,7 +482,7 @@ export default function Home() {
       <section
         id="evidence"
         aria-labelledby="evidence-heading"
-        className="border-b border-[#172033] bg-[#172033] text-[#ECE8E0]"
+        className="portfolio-evidence border-b border-[#172033] bg-[#172033] text-[#ECE8E0]"
       >
         <div className="mx-auto max-w-6xl px-6 py-14 lg:px-8 lg:py-20">
           <div className="max-w-2xl">
@@ -436,7 +510,7 @@ export default function Home() {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className="group border-b border-[#4F5868] p-6 transition-colors hover:bg-[#263B5E] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#ECE8E0] md:nth-[2n]:border-l md:nth-last-[1]:border-b-0 md:nth-last-[2]:border-b-0"
+                className="portfolio-proof group border-b border-[#4F5868] p-6 transition-colors hover:bg-[#263B5E] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#ECE8E0] md:nth-[2n]:border-l md:nth-last-[1]:border-b-0 md:nth-last-[2]:border-b-0"
               >
                 <div className="flex items-start justify-between gap-4">
                   <span className="text-sm font-bold text-[#4F5868]">
@@ -464,7 +538,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-[#172033] text-[#4F5868]">
+      <footer className="portfolio-footer bg-[#172033] text-[#4F5868]">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <p>T01 · 공개 자기소개 페이지</p>
           <p>Developer Profile</p>
