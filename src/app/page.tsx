@@ -278,15 +278,13 @@ export default function Home() {
                     <span className="portfolio-strength-title">{strength.title}</span>
                     <span aria-hidden="true" className="portfolio-strength-toggle">{isOpen ? "−" : "+"}</span>
                   </button>
-                  {isOpen && (
-                    <div id={"strength-detail-" + index} className="portfolio-strength-detail">
-                      <dl>
-                        <div><dt>Situation</dt><dd>{strength.situation}</dd></div>
-                        <div><dt>Action</dt><dd>{strength.action}</dd></div>
-                        <div><dt>Result</dt><dd>{strength.result}</dd></div>
-                      </dl>
-                    </div>
-                  )}
+                  <div id={"strength-detail-" + index} className="portfolio-strength-detail" hidden={!isOpen}>
+                    <dl>
+                      <div><dt>Situation</dt><dd>{strength.situation}</dd></div>
+                      <div><dt>Action</dt><dd>{strength.action}</dd></div>
+                      <div><dt>Result</dt><dd>{strength.result}</dd></div>
+                    </dl>
+                  </div>
                 </article>
               );
             })}
