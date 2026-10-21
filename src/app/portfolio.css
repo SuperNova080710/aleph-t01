@@ -611,3 +611,5 @@ html { scroll-behavior: smooth; scroll-padding-top: 95px; }
 @media (prefers-reduced-motion: reduce) {
   .portfolio-hero-proof-links a { transition: none !important; }
 }
+/* Small-text contrast on the light-blue final CTA: 5.68:1. */
+.portfolio-final-cta .portfolio-kicker { color: #1d4ed8; }
