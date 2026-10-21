@@ -264,6 +264,9 @@ export default function Home() {
                 <a href="https://github.com/SuperNova080710/Blog-frontend" target="_blank" rel="noopener noreferrer">
                   Blog-frontend <span aria-hidden="true">↗</span><span className="portfolio-sr-only"> (새 탭)</span>
                 </a>
+                <a href="https://github.com/SuperNova080710/Blog-backend" target="_blank" rel="noopener noreferrer">
+                  Blog-backend <span aria-hidden="true">↗</span><span className="portfolio-sr-only"> (새 탭)</span>
+                </a>
                 <a href="http://journal.dcs.or.kr/xml/47684/47684.pdf" target="_blank" rel="noopener noreferrer">
                   Digital Twin 논문 <span aria-hidden="true">↗</span><span className="portfolio-sr-only"> (새 탭)</span>
                 </a>
