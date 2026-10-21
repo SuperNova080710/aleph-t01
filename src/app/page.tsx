@@ -11,6 +11,10 @@ const strengths = [
       "단순히 증상을 우회하지 않고 요청과 응답의 흐름을 확인하면서 문제가 발생한 원인을 단계적으로 추적했습니다.",
     result:
       "원인을 확인한 뒤 필요한 부분을 수정하고 정상 동작을 확인했습니다.",
+    evidence: {
+      label: "관련 구현: Blog-frontend",
+      href: "https://github.com/SuperNova080710/Blog-frontend",
+    },
   },
   {
     title: "작업을 작은 단위로 나누어 관리합니다",
@@ -20,6 +24,10 @@ const strengths = [
       "GitHub Issue를 기준으로 작업 범위를 나누고 Commit과 Pull Request를 독립적인 작업 단위로 관리했습니다.",
     result:
       "각 작업의 목적과 변경 내용을 구분하여 프로젝트 진행 상황과 변경 이력을 확인할 수 있도록 했습니다.",
+    evidence: {
+      label: "Issue·PR 이력: Blog-frontend",
+      href: "https://github.com/SuperNova080710/Blog-frontend/pulls",
+    },
   },
   {
     title: "오류가 발생하면 원리부터 이해합니다",
@@ -29,6 +37,10 @@ const strengths = [
       "Nginx의 Reverse Proxy 역할과 요청 전달 구조를 확인하고 설정을 직접 구성했습니다.",
     result:
       "Reverse Proxy를 이용한 외부 요청과 내부 애플리케이션 사이의 요청 전달 구조를 구성했습니다.",
+    evidence: {
+      label: "관련 설정: Nginx-proxy",
+      href: "https://github.com/SuperNova080710/Nginx-proxy",
+    },
   },
 ];
 
@@ -199,6 +211,14 @@ export default function Home() {
               개발 과정에서 발생하는 문제를 단순히 우회하기보다 원인을 확인하고,
               작업을 작은 단위로 나누어 관리하는 개발자입니다.
             </p>
+            <p className="portfolio-hero-audience">
+              개발 경험과 문제 해결 과정을 확인하려는 채용 담당자와 협업 동료를 위한 공개 포트폴리오입니다.
+            </p>
+            <div className="portfolio-hero-activity">
+              <span className="portfolio-hero-activity-label">대표 활동 · PROJECT</span>
+              <strong>Node.js / Next.js 풀스택 웹 개발</strong>
+              <span>프론트엔드·백엔드 구현과 GitHub Issue/PR 기반 변경 관리</span>
+            </div>
             <div className="portfolio-hero-actions">
               <a className="portfolio-button portfolio-button-primary" href="#projects">
                 프로젝트 살펴보기 <span aria-hidden="true">↗</span>
@@ -235,6 +255,20 @@ export default function Home() {
             </div>
             <div className="portfolio-floating-tag portfolio-tag-one"><span aria-hidden="true">◇</span> Frontend <strong>Next.js</strong></div>
             <div className="portfolio-floating-tag portfolio-tag-two"><span aria-hidden="true">⌁</span> Backend <strong>Node.js</strong></div>
+            <div className="portfolio-hero-proof">
+              <div>
+                <span>확인 가능한 공개 근거 · EVIDENCE</span>
+                <strong>프로젝트 결과를 직접 확인하세요.</strong>
+              </div>
+              <div className="portfolio-hero-proof-links">
+                <a href="https://github.com/SuperNova080710/Blog-frontend" target="_blank" rel="noopener noreferrer">
+                  Blog-frontend <span aria-hidden="true">↗</span><span className="portfolio-sr-only"> (새 탭)</span>
+                </a>
+                <a href="http://journal.dcs.or.kr/xml/47684/47684.pdf" target="_blank" rel="noopener noreferrer">
+                  Digital Twin 논문 <span aria-hidden="true">↗</span><span className="portfolio-sr-only"> (새 탭)</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div className="portfolio-container portfolio-hero-bottom">
@@ -258,6 +292,24 @@ export default function Home() {
               <div><span aria-hidden="true">01</span><strong>원인 분석</strong><p>현상과 요청 흐름을 구분하고 문제의 근본 원인을 추적합니다.</p></div>
               <div><span aria-hidden="true">02</span><strong>체계적인 협업</strong><p>Issue, Commit, Pull Request로 변경 이력을 관리합니다.</p></div>
               <div><span aria-hidden="true">03</span><strong>원리 중심 학습</strong><p>구현 결과와 함께 작동하는 구조를 이해합니다.</p></div>
+            </div>
+            <div className="portfolio-public-scope" aria-label="공개 및 비공개 정보 범위">
+              <div>
+                <h3>공개하는 정보</h3>
+                <ul>
+                  <li>프로젝트 설명과 기술 스택</li>
+                  <li>GitHub 공개 저장소와 개발 이력</li>
+                  <li>공개된 논문 및 확인 가능한 결과</li>
+                </ul>
+              </div>
+              <div>
+                <h3>공개하지 않는 정보</h3>
+                <ul>
+                  <li>비공개 자료와 개인 식별 정보</li>
+                  <li>개인 연락처 및 인증 계정 정보</li>
+                  <li>Passkey 자격 증명과 세션·비밀값</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -371,6 +423,16 @@ export default function Home() {
                           <div><dt>Action</dt><dd>{strength.action}</dd></div>
                           <div><dt>Result</dt><dd>{strength.result}</dd></div>
                         </dl>
+                        <a
+                          className="portfolio-strength-evidence"
+                          href={strength.evidence.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          공개 근거 확인: {strength.evidence.label}
+                          <span aria-hidden="true">↗</span>
+                          <span className="portfolio-sr-only"> (새 탭)</span>
+                        </a>
                       </div>
                     </div>
                   </div>
